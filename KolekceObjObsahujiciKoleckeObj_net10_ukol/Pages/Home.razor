@@ -1,0 +1,54 @@
+﻿@page "/"
+
+<PageTitle>Jídelní lístek</PageTitle>
+
+<h1>Naše Menu</h1>
+
+@foreach (var kategorie in jidelniListek)   //Cyklus, který postupně projede všechny zápisy v seznamu jidelniListek
+{
+    <div class="mt-4 p-3 bg-light border rounded">
+        <h2 class="text-primary">@kategorie.NazevKategorie</h2> <!--Výpis názvů kategorií-->
+
+        <table class="table table-sm">
+            <!--Tabulka pro výpis kategorií a jídel-->
+            <thead>
+                <tr>
+                    <th>Název jídla</th>
+                    <th>Cena</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var jidlo in kategorie.SeznamJidel)   //Vnořený cyklus, který pro každou kategorii vypíše seznam položek, které obsahuje
+                {
+                    <tr>
+                        <td>@jidlo.Nazev</td>
+                        <td>@jidlo.Cena Kč</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <p><em>Počet jídel v této sekci: @kategorie.SeznamJidel.Count</em></p>  <!--Metoda .Count(), která spočítá počet položek v seznamu-->
+    </div>
+}
+
+@code {
+    private List<Models.Kategorie> jidelniListek = new List<Models.Kategorie>(); //Seznam, do kterého se budou ukládat jednotlivé instance třídy Kategorie
+
+    protected override void OnInitialized()
+    {
+        var polevky = new Models.Kategorie { NazevKategorie = "Polévky" };  //Vytvoření instance třídy Kategorie pro sekci Polévky
+
+        polevky.SeznamJidel.Add(new Models.Jidlo { Nazev = "Vývar", Cena = 45 });   //Vytvoření instancí třídy Jídlo a následné přidání pomocí metody .Add() do seznamu polévky
+        polevky.SeznamJidel.Add(new Models.Jidlo { Nazev = "Gulášová", Cena = 55 });
+
+        var hlavni = new Models.Kategorie { NazevKategorie = "Hlavní jídla" };  //Vytvoření instance třídy Kategorie pro sekci Hlavní jídla
+
+        hlavni.SeznamJidel.Add(new Models.Jidlo { Nazev = "Svíčková", Cena = 180 });    //Vytvoření instancí třídy Jídlo a následné přidání pomocí metody .Add() do seznamu hlavní
+        hlavni.SeznamJidel.Add(new Models.Jidlo { Nazev = "Řízek", Cena = 150 });
+        hlavni.SeznamJidel.Add(new Models.Jidlo { Nazev = "Salát Caesar", Cena = 140 });
+
+        jidelniListek.Add(polevky); //Přidání hotových kategorií do hlavního seznamu
+        jidelniListek.Add(hlavni);
+    }
+}
